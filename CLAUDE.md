@@ -52,6 +52,16 @@ _TODO: Document naming conventions, formatting rules, file organization patterns
 
 _TODO: Describe the testing strategy (unit, integration, e2e), where tests live, and how to run them._
 
+## Custom Subagents
+
+This repo includes example Claude Code subagents in `.claude/agents/`:
+
+- **code-reviewer** — read-only review of diffs for bugs, security issues, and style (`Read, Grep, Glob, Bash`).
+- **debugger** — reproduces failures, root-causes them, and applies a fix (`Read, Edit, Bash, Grep, Glob`).
+- **docs-sync** — keeps this CLAUDE.md and other docs in sync with the codebase (`Read, Edit, Glob, Grep, Bash`, `model: haiku`).
+
+Manage subagents with the `/agents` command (create, edit, delete, change tools/model). Invoke one explicitly with `@agent-name`, or let Claude delegate automatically based on each agent's `description`. Project-level agents live in `.claude/agents/*.md` (shared via git); personal ones go in `~/.claude/agents/`.
+
 ## Notes for AI Assistants
 
 - Prefer editing existing files over creating new ones.
