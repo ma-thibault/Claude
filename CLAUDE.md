@@ -62,6 +62,16 @@ This repo includes example Claude Code subagents in `.claude/agents/`:
 
 Manage subagents with the `/agents` command (create, edit, delete, change tools/model). Invoke one explicitly with `@agent-name`, or let Claude delegate automatically based on each agent's `description`. Project-level agents live in `.claude/agents/*.md` (shared via git); personal ones go in `~/.claude/agents/`.
 
+## Autonomous / Unattended Agents
+
+Two ways to let an agent run a task to completion without pausing for human input. Both remove human approval from the loop, so only use them in isolated/disposable environments (containers, VMs, throwaway branches), and scope the task narrowly.
+
+1. **`autonomous-worker` subagent** (`.claude/agents/autonomous-worker.md`) — sets `permissionMode: bypassPermissions`, so every tool call is auto-approved. Delegate a single, well-scoped, already-approved task to it via the Agent tool (`subagent_type: autonomous-worker`). It compensates for the lack of confirmation by restating its plan up front, avoiding destructive/irreversible commands, and working in small, verifiable steps.
+
+2. **Two-agent SDK harness** (`agent-harness/`) — a worker agent (Claude Agent SDK) runs the task while a separate "supervisor" model call decides allow/deny for each tool request via `can_use_tool`, so the worker never blocks on a human approval prompt. See `agent-harness/README.md` for setup and usage.
+
+The main session's default permission mode is set in `.claude/settings.json` (`acceptEdits` — auto-approves file edits, still confirms risky shell commands).
+
 ## Notes for AI Assistants
 
 - Prefer editing existing files over creating new ones.
